@@ -3,7 +3,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const tagInfo = await Tag.findAll({
       include: [{model: Product}],
@@ -14,13 +14,13 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const tagInfo = await Tag.findByPk({
+    const tagInfo = await Tag.findByPk(req.params.id,{
       include: [{model: Product}],
     });
     if (!tagInfo){
-      res.status(404).json({message: 'no such id'});
+      res.status(404).json({message: 'no such id.'});
       return;
     }
     res.status(200).json(tagInfo);
@@ -52,7 +52,7 @@ router.put('/:id', async (req, res) => {
     );
 
     if (!tagInfo) {
-      res.status(404).json({ message: 'No Tag found with that id!' });
+      res.status(404).json({ message: 'No such id.' });
       return;
     }
 
@@ -72,7 +72,7 @@ router.delete('/:id', async (req, res) => {
     });
 
     if (!tagInfo) {
-      res.status(404).json({ message: 'No Tag found with that id!' });
+      res.status(404).json({ message: 'No such id.' });
       return;
     }
 
